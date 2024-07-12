@@ -1,17 +1,30 @@
 import getMenuBySlug from '@/lib/queries/getMenuBySlug'
+import getSettings from '@/lib/queries/getSettings'
 import Link from 'next/link'
 
 /**
  * Header component.
  */
 export default async function Header() {
+  const settings = await getSettings()
   const menu = await getMenuBySlug('header')
 
   return (
     <header>
       <div>
-        <h1 className="mb-0">Next.js WordPress</h1>
-        <p>It&apos;s Headless WordPress</p>
+        <Link href="/">
+          <h1
+            className="mb-0"
+            dangerouslySetInnerHTML={{
+              __html: settings?.title || 'Next.js WordPress'
+            }}
+          />
+        </Link>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: settings?.description || `It&apos;s Headless WordPress`
+          }}
+        />
       </div>
       <nav className="flex justify-between gap-4">
         {!!menu &&

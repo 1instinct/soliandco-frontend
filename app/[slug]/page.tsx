@@ -1,10 +1,10 @@
-import getAllBooks from '@/lib/queries/getAllBooks'
+// import getAllBooks from '@/lib/queries/getAllBooks'
 import getAllPosts from '@/lib/queries/getAllPosts'
 import getPageBySlug from '@/lib/queries/getPageBySlug'
-import {Page, Post} from '@/lib/types'
+import { Page, Post } from '@/lib/types'
 import Image from 'next/image'
 import Link from 'next/link'
-import {notFound} from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 /**
  * Fetches data from WordPress.
@@ -16,9 +16,9 @@ async function fetchData(slug: string) {
   }
 
   // If the slug is 'books', fetch all books.
-  if (slug === 'books') {
-    return {posts: await getAllBooks(), context: 'books'}
-  }
+  // if (slug === 'books') {
+  //   return {posts: await getAllBooks(), context: 'books'}
+  // }
 
   // Otherwise, this could be a page.
   const page = await getPageBySlug(slug)
@@ -57,10 +57,10 @@ function RenderPostsList({posts, context}: {posts: Post[]; context: string}) {
         {posts.map((post: Post) => (
           <article className="w-72" key={post.databaseId}>
             <Image
-              alt={post.featuredImage.node.altText}
-              height={post.featuredImage.node.mediaDetails.height}
-              src={post.featuredImage.node.sourceUrl}
-              width={post.featuredImage.node.mediaDetails.width}
+              alt={post.featuredImage?.node.altText || post.title}
+              height={post.featuredImage?.node.mediaDetails.height || 300}
+              src={post.featuredImage?.node.sourceUrl || "https://via.placeholder.com/300"}
+              width={post.featuredImage?.node.mediaDetails.width || 300}
               priority={true}
             />
             <Link href={`/${context}/${post.slug}`}>

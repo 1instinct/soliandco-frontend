@@ -1,9 +1,9 @@
 import config from '@/lib/config'
 import getTagBySlug from '@/lib/queries/getTagBySlug'
-import {Metadata} from 'next'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import {notFound} from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 /**
  * Generate the metadata for each static route at build time.
@@ -18,7 +18,7 @@ export async function generateMetadata({
   const slug = params.slug
 
   return {
-    title: `${slug} Archives - ${config.siteName}`,
+    title: `${slug.replace('%20', ' ')} - ${config.siteName}`,
     description: `The tag archive for ${slug}`
   }
 }
@@ -39,15 +39,15 @@ export default async function TagArchive({params}: {params: {slug: string}}) {
 
   return (
     <main className="flex flex-col gap-8">
-      <h1 className="capitalize">Post Tag: {params.slug}</h1>
+      <h1 className="capitalize">{params.slug.replace('%20', ' ')}</h1>
       <div className="flex flex-wrap gap-8">
         {posts.map((post) => (
           <article className="w-72" key={post.databaseId}>
             <Image
-              alt={post.featuredImage.node.altText}
-              height={post.featuredImage.node.mediaDetails.height}
-              src={post.featuredImage.node.sourceUrl}
-              width={post.featuredImage.node.mediaDetails.width}
+              alt={post.featuredImage?.node.altText}
+              height={post.featuredImage?.node.mediaDetails.height}
+              src={post.featuredImage?.node.sourceUrl}
+              width={post.featuredImage?.node.mediaDetails.width}
               priority={true}
             />
             <Link href={`/blog/${post.slug}`}>

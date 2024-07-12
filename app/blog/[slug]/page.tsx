@@ -1,9 +1,10 @@
 import CommentForm from '@/components/CommentForm'
 import getAllPosts from '@/lib/queries/getAllPosts'
 import getPostBySlug from '@/lib/queries/getPostBySlug'
-import {Metadata} from 'next'
+import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import {notFound} from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 /**
  * Generate the static routes at build time.
@@ -58,6 +59,8 @@ export default async function Post({params}: {params: {slug: string}}) {
   // Fetch a single post from WordPress.
   const post = await getPostBySlug(params.slug)
 
+  const contentSanitized = post.content.replace(/<ul>|<\/ul>|<li>|<\/li>/, '');
+
   // No post? Bail...
   if (!post) {
     notFound()
@@ -66,12 +69,23 @@ export default async function Post({params}: {params: {slug: string}}) {
   return (
     <article>
       <header>
+        <Image
+          alt={post.featuredImage?.node.altText}
+          height={post.featuredImage?.node.mediaDetails.height}
+          src={post.featuredImage?.node.sourceUrl}
+          width={post.featuredImage?.node.mediaDetails.width}
+          priority={true}
+        />
         <h2 dangerouslySetInnerHTML={{__html: post.title}} />
         <p className="italic">
           By {post.author.node.name} on <time>{post.date}</time>
         </p>
       </header>
-      <div dangerouslySetInnerHTML={{__html: post.content}} />
+      {/* Remove the <ul> and <li> elements from the post.content string */}
+      <div
+        className="content"
+        dangerouslySetInnerHTML={{__html: contentSanitized}}
+      />
       <footer className="flex items-center justify-between gap-4 pb-4">
         <div>
           <h3>Categories</h3>
