@@ -7,7 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/gregrickaby/nextjs-wordpress.git"
   },
-  "author": "Greg Rickaby <greg@gregrickaby.com>",
+  "author": "Aaron Smulktis <aaron@instinct.is>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gregrickaby/nextjs-wordpress/issues"
